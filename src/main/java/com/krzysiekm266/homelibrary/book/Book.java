@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krzysiekm266.homelibrary.author.Author;
 
 @Entity
@@ -38,8 +37,6 @@ public class Book implements Serializable {
     @Column(name="title", nullable = false)
     private String title;
     
-    //przetestowac
-    //@JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
         cascade = {
             CascadeType.DETACH,

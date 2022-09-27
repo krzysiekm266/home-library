@@ -2,17 +2,17 @@ package com.krzysiekm266.homelibrary.author;
 
 import java.util.List;
 import java.util.Objects;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.krzysiekm266.homelibrary.exceptions.AuthorNameExistException;
-import com.krzysiekm266.homelibrary.exceptions.AuthorNameRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.AuthorNotFoundException;
-import com.krzysiekm266.homelibrary.exceptions.AuthorRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorNameExistException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorNameRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorNotFoundException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorRequiredException;
 
 @Service
 public class AuthorService {
@@ -44,20 +44,28 @@ public class AuthorService {
     /**
      * Add new Author
      * */
-    public ResponseEntity<Author> add(Author author) {
+    public ResponseEntity<Author> add(Optional<Author> author) {
         Author newAuthor = null;
         String newAuthorName = null;
-        if(author == null  ) {
+    
+        if(author.isEmpty()  ) {
             throw new AuthorRequiredException("Author required.");
         }
-        else if(author.getName() == null || author.getName().isEmpty()) {
+        if(author.get().getName() == null || author.get().getName().isEmpty()) {
             throw new AuthorNameRequiredException("Author name required.");
         } 
-        newAuthorName = author.getName();
+        newAuthorName = author.get().getName();
+        // if(author == null  ) {
+        //     throw new AuthorRequiredException("Author required.");
+        // }
+        // if(author.getName() == null || author.getName().isEmpty()) {
+        //     throw new AuthorNameRequiredException("Author name required.");
+        // } 
+        // newAuthorName = author.getName();
 
         //Author check/create
         List<Author> authorByName =  authorRepository.findByName(newAuthorName);
-        HttpStatus httpStatus  = authorByName.isEmpty() ? HttpStatus.CREATED : HttpStatus.FOUND;
+        HttpStatus httpStatus  = authorByName.isEmpty() ? HttpStatus.CREATED : HttpStatus.IM_USED;
         if(!authorByName.isEmpty()) {
             throw new AuthorNameExistException("Author already exist.");
         }

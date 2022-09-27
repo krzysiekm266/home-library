@@ -2,6 +2,7 @@ package com.krzysiekm266.homelibrary.book;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.krzysiekm266.homelibrary.author.Author;
 import com.krzysiekm266.homelibrary.author.AuthorRepository;
-import com.krzysiekm266.homelibrary.exceptions.AuthorRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.BookNotFoundException;
-import com.krzysiekm266.homelibrary.exceptions.BookRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.BookTitleRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.TitleExistException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookNotFoundException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookTitleExistException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookTitleRequiredException;
 
 @Service
 public class BookService {
@@ -52,6 +53,7 @@ public class BookService {
 
         Author newAuthor = null;
         Book newBook = null;
+
         if(book == null) {
             throw new BookRequiredException("Book required");
         }
@@ -83,7 +85,7 @@ public class BookService {
             .orElseThrow( () ->  new BookNotFoundException("Book by Id: "+ bookId + "dosnt exist.") );
             
         if(Objects.equals(bookById.getTitle(), book.getTitle())) {
-            throw new TitleExistException("Title already exists.");
+            throw new BookTitleExistException("Title already exists.");
         }
         book.setId(bookId);
         bookById = book;

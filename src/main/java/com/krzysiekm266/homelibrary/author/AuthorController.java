@@ -1,6 +1,7 @@
 package com.krzysiekm266.homelibrary.author;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.krzysiekm266.homelibrary.exceptions.AuthorNameExistException;
-import com.krzysiekm266.homelibrary.exceptions.AuthorNameRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.AuthorNotFoundException;
-import com.krzysiekm266.homelibrary.exceptions.AuthorRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorNameExistException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorNameRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorNotFoundException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorRequiredException;
 
 @RestController
 @RequestMapping("/author")
@@ -39,20 +40,20 @@ public class AuthorController {
         try {
             return this.authorService.get(authorId);
         } catch (AuthorNotFoundException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         
     }
     @PostMapping("/add")
-    public ResponseEntity<?> addBook(@RequestBody Author author) {
+    public ResponseEntity<?> addBook(@RequestBody Optional<Author> author) {
         try {
             return this.authorService.add(author);   
         } catch (AuthorRequiredException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
         } catch (AuthorNameRequiredException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
         } catch (AuthorNameExistException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.IM_USED);
         }
          
     }

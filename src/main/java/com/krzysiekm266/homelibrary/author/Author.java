@@ -46,17 +46,7 @@ public class Author implements Serializable {
         }
     )
     private Set<Book> books = new HashSet<>();
-        //do testow
-    // public void addBook(Book book) {
-    //     this.books.add(book);
-    //     book.getAuthor().add(this);
-    // }
-
-    // public void removeBook(Book book) {
-    //     this.books.remove(book);
-    //     book.removeAuthor(this);
-    //     book = null;
-    // }
+   
 
     public Author() {
     }

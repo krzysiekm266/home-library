@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.krzysiekm266.homelibrary.exceptions.AuthorRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.BookNotFoundException;
-import com.krzysiekm266.homelibrary.exceptions.BookTitleRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.TitleExistException;
+import com.krzysiekm266.homelibrary.exceptions.author.AuthorRequiredException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookNotFoundException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookTitleExistException;
+import com.krzysiekm266.homelibrary.exceptions.book.BookTitleRequiredException;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class BookController {
         try {
             return this.bookService.get(bookId);
         } catch (BookNotFoundException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         
     }
@@ -49,9 +49,9 @@ public class BookController {
         try {
             return this.bookService.add(book);  
         } catch (BookTitleRequiredException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.NO_CONTENT);
         } catch (AuthorRequiredException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.NO_CONTENT);
         } 
     }
 
@@ -60,9 +60,9 @@ public class BookController {
         try {
             return this.bookService.update(bookId, book);
         } catch (BookNotFoundException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        } catch (TitleExistException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+        } catch (BookTitleExistException e) {
+            return new ResponseEntity<String>(e.getMessage(),HttpStatus.IM_USED);
         }     
     }
 }

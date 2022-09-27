@@ -1,11 +1,16 @@
 package com.krzysiekm266.homelibrary;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.krzysiekm266.homelibrary.author.Author;
 import com.krzysiekm266.homelibrary.author.AuthorRepository;
@@ -40,14 +45,26 @@ public class HomeLibraryApplication implements CommandLineRunner {
 		b2.addAuthor(a2);
 		b2.addAuthor(a3);
 		/************************************************************* */
-		// b1.getAuthor().add(this.authorRepository.findById(1L).get());
-		// b1.getAuthor().add(this.authorRepository.findById(3L).get());
-		// b2.getAuthor().add(this.authorRepository.findById(2L).get());
-		// b2.getAuthor().add(this.authorRepository.findById(3L).get());
-		/************************************************************ */
+
 		this.bookRepository.saveAll(List.of(b1, b2));
 		
 		
 	}
-
+	
+	//Cors config 
+	@Bean
+	public CorsFilter corsFilter() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.setAllowCredentials(true);
+		corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+		corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
+				"Accept", "Authorization", "Origin, Accept", "X-Requested-With",
+				"Access-Control-Request-Method", "Access-Control-Request-Headers"));
+		corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization",
+				"Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+		return new CorsFilter(urlBasedCorsConfigurationSource);
+	}
 }

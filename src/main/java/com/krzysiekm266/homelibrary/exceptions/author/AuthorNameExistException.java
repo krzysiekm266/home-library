@@ -1,4 +1,4 @@
-package com.krzysiekm266.homelibrary.exceptions;
+package com.krzysiekm266.homelibrary.exceptions.author;
 
 public class AuthorNameExistException  extends RuntimeException {
 
