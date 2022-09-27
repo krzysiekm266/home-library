@@ -4,14 +4,12 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -19,8 +17,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krzysiekm266.homelibrary.book.Book;
 
-@Entity
-@Table
+@Entity(name = "Author")
+@Table(name = "author")
+// @JsonIdentityInfo(
+//   generator = ObjectIdGenerators.PropertyGenerator.class, 
+//   property = "id")
+
 public class Author implements Serializable {
     @Id
     @SequenceGenerator(
@@ -30,24 +32,28 @@ public class Author implements Serializable {
     )
     @GeneratedValue(
         strategy = GenerationType.SEQUENCE,
-        generator = "author_sequence")
-    private Long Id;
+        generator = "author_sequence"
+    )
+    @Column(updatable = false)
+    private Long id;
 
-    @Column(name="name",nullable = false)
+    @Column(name="name",nullable = false,columnDefinition = "TEXT",unique = true)
     private String name;
     
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors",
-        cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-        }
-    )
+    @ManyToMany(mappedBy = "authors",fetch = FetchType.LAZY)
     private Set<Book> books = new HashSet<>();
-   
+   /***************do testow********************************* */
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.getAuthors().add(this);
+    }
 
+    public void removeBook(Book book) {
+        this.books.remove(book);
+        book.getAuthors().remove(this);
+    }
+    /**************************************** */
     public Author() {
     }
     
@@ -60,18 +66,13 @@ public class Author implements Serializable {
         this.books = books;
     }
 
-    public Author(Long id, String name, Set<Book> books) {
-        this.Id = id;
-        this.name = name;
-        this.books = books;
-    }
-
+    
     public Long getId() {
-        return this.Id;
+        return this.id;
     }
 
     public void setId(Long id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -92,7 +93,7 @@ public class Author implements Serializable {
 
     @Override
     public String toString() {
-        return "Author [Id=" + Id + ", books=" + books + ", name=" + name + "]";
+        return "Author [Id=" + id + ", books=" + books + ", name=" + name + "]";
     }
     
    

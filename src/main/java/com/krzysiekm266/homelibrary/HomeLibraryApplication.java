@@ -32,21 +32,28 @@ public class HomeLibraryApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Book b1 = new Book("Potop");
-		Book b2 = new Book("Art of war");
 		Author a1 = new Author("Henryk Sienkiewicz");
 		Author a2 = new Author("Sun Zi");
 		Author a3 = new Author("Adam Mickiewicz");
-		this.bookRepository.saveAll(List.of(b1, b2));
-		this.authorRepository.saveAll(List.of(a1, a2,a3));
+
+		Book b1 = new Book("Potop");
+		Book b2 = new Book("Art of war");
+		
+	
 		/********************************************************** */
+
 		b1.addAuthor(a1);
 		b1.addAuthor(a3);
 		b2.addAuthor(a2);
 		b2.addAuthor(a3);
+		
 		/************************************************************* */
+		
 
 		this.bookRepository.saveAll(List.of(b1, b2));
+		this.authorRepository.saveAll(List.of(a1, a2,a3));
+
+		
 		
 		
 	}

@@ -2,7 +2,6 @@ package com.krzysiekm266.homelibrary.book;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,7 @@ public class BookService {
      * */
     public ResponseEntity<Book> get(Long bookId) {
         Book bookByid = this.bookRepository.findById(bookId)
-            .orElseThrow( () ->  new BookNotFoundException("Book by Id: "+ bookId + "dosnt exist."));    
+            .orElseThrow( () ->  new BookNotFoundException("Book by Id: "+ bookId + " dosen't exist."));    
         return new ResponseEntity<Book>(bookByid,HttpStatus.OK);    
     }
 
@@ -60,14 +59,18 @@ public class BookService {
         if(book.getTitle() == null || book.getTitle().isEmpty()) {
             throw new BookTitleRequiredException("Book Title required.");
         }
-        if(book.getAuthor() == null || book.getAuthor().isEmpty()) {
+        if(book.getAuthors() == null || book.getAuthors().isEmpty()) {
             throw new AuthorRequiredException("Author is required.");
         }
         //Book check
         List<Book> bookByTitle = this.bookRepository.findByTitle(book.getTitle());
-        newBook = bookByTitle.isEmpty() ? new Book(book.getTitle()) : bookByTitle.get(0);
+        if(!bookByTitle.isEmpty()) {
+            String title =  bookByTitle.iterator().next().getTitle(); 
+            throw new BookTitleExistException("Book title " + title +" already exist");
+        }
+        newBook = new Book(book.getTitle()); 
         //Author check/create
-        String bookAuthorName = book.getAuthor().iterator().next().getName();
+        String bookAuthorName = book.getAuthors().iterator().next().getName();
         List<Author> authorByName = authorRepository.findByName(bookAuthorName);
         newAuthor = authorByName.isEmpty() ? new Author(bookAuthorName) : authorByName.get(0);
       

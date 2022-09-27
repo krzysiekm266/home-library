@@ -15,13 +15,19 @@ import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.krzysiekm266.homelibrary.author.Author;
 
-@Entity
-@Table
+import com.krzysiekm266.homelibrary.author.Author;
+import com.krzysiekm266.homelibrary.librarycard.LibraryCard;
+
+@Entity(name = "Book")
+@Table(name = "book")
+// @JsonIdentityInfo(
+//   generator = ObjectIdGenerators.PropertyGenerator.class, 
+//   property = "id")
 public class Book implements Serializable {
     @Id
     @SequenceGenerator(
@@ -31,19 +37,24 @@ public class Book implements Serializable {
     )
     @GeneratedValue(
         strategy = GenerationType.SEQUENCE,
-        generator = "book_sequence")
+        generator = "book_sequence"
+    )
+    @Column(updatable = false)
     private Long id;
 
-    @Column(name="title", nullable = false)
+    @Column(name="title", nullable = false,columnDefinition = "TEXT",unique = true)
     private String title;
     
-    @ManyToMany(fetch = FetchType.LAZY,
-        cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
+   
+    @ManyToMany(
+        fetch = FetchType.LAZY,
+        cascade = { 
+            
             CascadeType.PERSIST,
-            CascadeType.REFRESH
+            CascadeType.MERGE,
+             
         }
+       
     )
     @JoinTable(
         name = "book_author",
@@ -51,12 +62,16 @@ public class Book implements Serializable {
         inverseJoinColumns =   @JoinColumn(name = "author_id") 
     )
     private Set<Author> authors = new HashSet<>();
+    
+    @ManyToOne
+    private LibraryCard libraryCard;
 
-    public void addAuthor(Author author) {
+    public Book addAuthor(Author author) {
         this.authors.add(author);
         author.getBooks().add(this);
+        return this;
     }
-
+   
     public void removeAuthor(Author author) {
         this.authors.remove(author);
         author.getBooks().remove(this);
@@ -74,11 +89,7 @@ public class Book implements Serializable {
         this.authors = authors;
     }
 
-    public Book(Long id, String title, Set<Author> authors) {
-        this.id = id;
-        this.title = title;
-        this.authors = authors;
-    }
+    
 
     public Long getId() {
         return id;
@@ -96,17 +107,25 @@ public class Book implements Serializable {
         this.title = title;
     }
 
-    public Set<Author> getAuthor() {
+    public Set<Author> getAuthors() {
         return this.authors;
     }
 
-    public void setAuthor(Set<Author> authors) {
+    public void setAuthors(Set<Author> authors) {
         this.authors = authors;
     }
-
+    
     @Override
     public String toString() {
         return "Book [author=" + authors + ", id=" + id + ", title=" + title + "]";
+    }
+
+    public LibraryCard getLibraryCard() {
+        return libraryCard;
+    }
+
+    public void setLibraryCard(LibraryCard libraryCard) {
+        this.libraryCard = libraryCard;
     }
 
    

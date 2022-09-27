@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.krzysiekm266.homelibrary.exceptions.author.AuthorNameExistException;
-import com.krzysiekm266.homelibrary.exceptions.author.AuthorNameRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.author.AuthorNotFoundException;
-import com.krzysiekm266.homelibrary.exceptions.author.AuthorRequiredException;
+
 
 @RestController
 @RequestMapping("/author")
@@ -30,42 +26,21 @@ public class AuthorController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Author>> getBooks() {
-       return this.authorService.getAll();
-        
+    public ResponseEntity<List<Author>> getAuthors() {
+       return this.authorService.getAll();    
     }
 
     @GetMapping("/{authorId}")
-    public ResponseEntity<?> getBook(@PathVariable("authorId") Long authorId) {
-        try {
-            return this.authorService.get(authorId);
-        } catch (AuthorNotFoundException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
-        }
-        
+    public ResponseEntity<Author> getAuthor(@PathVariable("authorId") Long authorId) {
+        return this.authorService.get(authorId); 
     }
     @PostMapping("/add")
-    public ResponseEntity<?> addBook(@RequestBody Optional<Author> author) {
-        try {
-            return this.authorService.add(author);   
-        } catch (AuthorRequiredException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
-        } catch (AuthorNameRequiredException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
-        } catch (AuthorNameExistException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.IM_USED);
-        }
-         
+    public ResponseEntity<Author> addAuthor(@RequestBody Optional<Author> author) {
+        return this.authorService.add(author);       
     }
 
     @PutMapping("/update/{authorId}")
-    public ResponseEntity<?> updateBook(@PathVariable("authorId") Long authorId, @RequestBody Author author) {
-        try {
-            return this.authorService.update(authorId, author);
-        } catch (AuthorNotFoundException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        } catch (AuthorNameExistException e) {
-            return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }     
+    public ResponseEntity<Author> updateAuthor(@PathVariable("authorId") Long authorId, @RequestBody Author author) {
+         return this.authorService.update(authorId, author);
     }
 }

@@ -28,7 +28,7 @@ public class AuthorService {
      * Get all authors
      * */
     public  ResponseEntity<List<Author>> getAll() {
-        List<Author> authors = this.authorRepository.findAll();
+        List<Author> authors = this.authorRepository.findAllByAuthor();
         return new ResponseEntity<List<Author>>(authors,HttpStatus.OK);
     }
 
