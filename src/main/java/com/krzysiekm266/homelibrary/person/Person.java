@@ -21,6 +21,16 @@ import com.krzysiekm266.homelibrary.librarycard.LibraryCard;
 @Entity(name = "Person")
 @Table(name = "person")
 public class Person implements Serializable{
+    public enum Gender {
+        MALE("MALE"),
+        FAMALE("FEMALE");
+        private String gender;
+        private Gender(String gender) {
+            this.gender = gender;
+        }
+        
+    }
+
     @Id
     @SequenceGenerator(
         name = "person_sequence",
@@ -41,6 +51,9 @@ public class Person implements Serializable{
     @Column(name = "name")
     private String name;
  
+    @Column(name = "gender")
+    private Gender gender;
+
     @Column(name = "date_of_birth")
     LocalDate dob;
 
@@ -146,6 +159,79 @@ public class Person implements Serializable{
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
     
+    @Override
+    public String toString() {
+        return "Person [address=" + address + ", age=" + age + ", dob=" + dob + ", firstName=" + firstName + ", id="
+                + id + ", lastName=" + lastName + ", libraryCard=" + libraryCard + ", name=" + name + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result + ((age == null) ? 0 : age.hashCode());
+        result = prime * result + ((dob == null) ? 0 : dob.hashCode());
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Person other = (Person) obj;
+        if (address == null) {
+            if (other.address != null)
+                return false;
+        } else if (!address.equals(other.address))
+            return false;
+        if (age == null) {
+            if (other.age != null)
+                return false;
+        } else if (!age.equals(other.age))
+            return false;
+        if (dob == null) {
+            if (other.dob != null)
+                return false;
+        } else if (!dob.equals(other.dob))
+            return false;
+        if (firstName == null) {
+            if (other.firstName != null)
+                return false;
+        } else if (!firstName.equals(other.firstName))
+            return false;
+        if (gender != other.gender)
+            return false;
+        if (lastName == null) {
+            if (other.lastName != null)
+                return false;
+        } else if (!lastName.equals(other.lastName))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
+    }
     
+  
+   
 }

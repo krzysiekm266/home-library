@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.krzysiekm266.homelibrary.book.Book;
 import com.krzysiekm266.homelibrary.person.Person;
 
@@ -54,6 +55,7 @@ public class LibraryCard implements Serializable {
     private Person person;
     
     @OneToMany(mappedBy = "libraryCard",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     Set<Book> books = new HashSet<>();
 
     public void addBook(Book book) {
@@ -99,6 +101,12 @@ public class LibraryCard implements Serializable {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+    @Override
+    public String toString() {
+        return "LibraryCard [books=" + books + ", id=" + id + ", libraryCardId=" + libraryCardId + ", person=" + person
+                + "]";
     }
 
     
