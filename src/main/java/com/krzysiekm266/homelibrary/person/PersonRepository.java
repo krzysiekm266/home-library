@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person,Long> {
-     @Query("select p from Person p where p =?1")
+     @Query("select p from Person p where p =:person")
      public Optional<Person> findPerson(Person person);
 }

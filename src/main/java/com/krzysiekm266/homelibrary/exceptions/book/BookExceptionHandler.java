@@ -13,7 +13,7 @@ public class BookExceptionHandler {
     ResponseEntity<Object> handleBookNotFoundException(BookNotFoundException e) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         BookNotFoundException bookNotFoundException = new BookNotFoundException(e.getMessage());
-        return new ResponseEntity<>(bookNotFoundException.getLocalizedMessage(),httpStatus);
+        return new ResponseEntity<Object>(bookNotFoundException.getLocalizedMessage(),httpStatus);
 
     }
 
@@ -21,7 +21,7 @@ public class BookExceptionHandler {
     ResponseEntity<Object> handleBookRequiredException(BookRequiredException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         BookRequiredException bookRequiredException = new BookRequiredException(e.getMessage());
-        return new ResponseEntity<>(bookRequiredException.getLocalizedMessage(),httpStatus);
+        return new ResponseEntity<Object>(bookRequiredException.getLocalizedMessage(),httpStatus);
 
     }
 
@@ -29,7 +29,7 @@ public class BookExceptionHandler {
     ResponseEntity<Object> handleBookTitleRequiredException(BookTitleRequiredException e) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         BookTitleRequiredException bookTitleRequiredException = new BookTitleRequiredException(e.getMessage());
-        return new ResponseEntity<>(bookTitleRequiredException.getLocalizedMessage(),httpStatus);
+        return new ResponseEntity<Object>(bookTitleRequiredException.getLocalizedMessage(),httpStatus);
 
     }
 
@@ -37,7 +37,7 @@ public class BookExceptionHandler {
     ResponseEntity<Object> handleBookTitleExistException(BookTitleExistException e) {
         HttpStatus httpStatus = HttpStatus.IM_USED;
         BookTitleExistException bookTitleExistException = new BookTitleExistException(e.getMessage());
-        return new ResponseEntity<>(bookTitleExistException.getLocalizedMessage(),httpStatus);
+        return new ResponseEntity<Object>(bookTitleExistException.getLocalizedMessage(),httpStatus);
 
     }
 }

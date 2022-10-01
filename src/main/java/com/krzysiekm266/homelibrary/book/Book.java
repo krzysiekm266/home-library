@@ -64,7 +64,6 @@ public class Book implements Serializable {
     private Set<Author> authors = new HashSet<>();
     
     @ManyToOne
-    @JsonBackReference
     private LibraryCard libraryCard;
 
     public Book addAuthor(Author author) {

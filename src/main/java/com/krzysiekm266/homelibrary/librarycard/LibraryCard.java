@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.krzysiekm266.homelibrary.book.Book;
 import com.krzysiekm266.homelibrary.person.Person;
@@ -50,17 +51,17 @@ public class LibraryCard implements Serializable {
     @Column(name = "library_id")
     private Integer libraryCardId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private Person person;
     
     @OneToMany(mappedBy = "libraryCard",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonManagedReference
-    Set<Book> books = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
 
     public void addBook(Book book) {
 		books.add(book);
-		book.setLibraryCard(this);;
+		book.setLibraryCard(this);
 	}
 
 	public void removeBook(Book book) {
@@ -108,6 +109,51 @@ public class LibraryCard implements Serializable {
         return "LibraryCard [books=" + books + ", id=" + id + ", libraryCardId=" + libraryCardId + ", person=" + person
                 + "]";
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((books == null) ? 0 : books.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((libraryCardId == null) ? 0 : libraryCardId.hashCode());
+        result = prime * result + ((person == null) ? 0 : person.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LibraryCard other = (LibraryCard) obj;
+        if (books == null) {
+            if (other.books != null)
+                return false;
+        } else if (!books.equals(other.books))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (libraryCardId == null) {
+            if (other.libraryCardId != null)
+                return false;
+        } else if (!libraryCardId.equals(other.libraryCardId))
+            return false;
+        if (person == null) {
+            if (other.person != null)
+                return false;
+        } else if (!person.equals(other.person))
+            return false;
+        return true;
+    }
+
+    
 
     
 }

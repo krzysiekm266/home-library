@@ -11,8 +11,16 @@ public class LibraryCardExceptionHandler {
     @ExceptionHandler(value = {LibraryCardNotFoundException.class})
     public ResponseEntity<Object> handleLibraryCardNotFoundException(LibraryCardNotFoundException e) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        LibraryCardNotFoundException libraryCardNotFoundException = new LibraryCardNotFoundException( "LibraryCard not found.");
+        LibraryCardNotFoundException libraryCardNotFoundException = new LibraryCardNotFoundException( "Library card not found.");
         return new ResponseEntity<Object>(libraryCardNotFoundException,httpStatus);
+
+    }
+
+    @ExceptionHandler(value = {LibraryCardRequiredException.class})
+    public ResponseEntity<Object> handleLibraryCardRequiredException(LibraryCardRequiredException e) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        LibraryCardRequiredException libraryCardRequiredException = new LibraryCardRequiredException( "Library card not found.");
+        return new ResponseEntity<Object>(libraryCardRequiredException,httpStatus);
 
     }
 }

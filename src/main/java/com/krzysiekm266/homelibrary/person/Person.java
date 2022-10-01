@@ -42,26 +42,28 @@ public class Person implements Serializable{
         generator = "person_sequence")
     private Long id;
 
-    @Transient
-    private String firstName;
+    
+    @Column(name = "first_name")
+    private String firstName ;
+
+    @Column(name = "last_name")
+    private String lastName ;
 
     @Transient
-    private String lastName;
-
-    @Column(name = "name")
+    @Column(name = "name",columnDefinition = "TEXT")
     private String name;
  
     @Column(name = "gender")
     private Gender gender;
 
     @Column(name = "date_of_birth")
-    LocalDate dob;
+    private LocalDate dob;
 
     @Transient
     @Column(name = "age")
-    Integer age;
+    private Integer age;
 
-    @Column(name = "address")
+    @Column(name = "address",columnDefinition = "TEXT")
     private String address;
 
     @OneToOne(
@@ -73,7 +75,7 @@ public class Person implements Serializable{
     private LibraryCard libraryCard;
 
     public void addLibraryCard(LibraryCard libraryCard) {
-		libraryCard.setPerson(this);;
+		libraryCard.setPerson(this);
 		this.libraryCard = libraryCard;
 	}
 
@@ -92,7 +94,8 @@ public class Person implements Serializable{
         this.lastName = lastName;
         this.dob = dob;
         this.address = address;
-        this.libraryCard = libraryCard;
+        this.addLibraryCard(libraryCard);
+        // this.libraryCard = libraryCard;
     }
 
     public Long getId() {
@@ -120,8 +123,8 @@ public class Person implements Serializable{
     }
 
     public String getName() {
-        name = String.join(" ", this.firstName,this.lastName);
-        return name;
+        this.name = String.join(" ", this.firstName,this.lastName);
+        return this.name;
     }
 
     public void setName(String name) {
@@ -184,6 +187,7 @@ public class Person implements Serializable{
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((libraryCard == null) ? 0 : libraryCard.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -224,6 +228,11 @@ public class Person implements Serializable{
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
+        if (libraryCard == null) {
+            if (other.libraryCard != null)
+                return false;
+        } else if (!libraryCard.equals(other.libraryCard))
+            return false;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -231,6 +240,7 @@ public class Person implements Serializable{
             return false;
         return true;
     }
+
     
   
    

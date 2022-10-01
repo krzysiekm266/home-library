@@ -86,11 +86,12 @@ public class AuthorService {
         if(Objects.equals(authorById.getName(), author.getName())) {
             throw new AuthorNameExistException("Author already exists.");
         }
-        author.setId(authorId);
-        authorById = author;
-        Author authorUpdated = this.authorRepository.save(authorById);
         
-        return new ResponseEntity<Author>(authorUpdated,HttpStatus.OK);
+        authorById.setName(author.getName());
+        this.authorRepository.flush();
+        //Author authorUpdated = this.authorRepository.save(authorById);
+        
+        return new ResponseEntity<Author>(authorById,HttpStatus.OK);
       
     }
 }

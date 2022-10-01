@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/book")
@@ -33,7 +34,7 @@ public class BookController {
         return this.bookService.get(bookId);
     }
     @PostMapping("/add")
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {   
+    public ResponseEntity<Book> addBook(@RequestBody Optional<Book> book) {   
         return this.bookService.add(book);   
     }
 
