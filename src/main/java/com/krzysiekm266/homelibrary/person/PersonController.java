@@ -36,7 +36,7 @@ public class PersonController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<Person> findPerson( @RequestBody Optional<Person> personToFind) {
+    public ResponseEntity<Person> findPerson(@RequestBody Optional<Person> personToFind) {
         return this.personService.findPerson(personToFind);
     }
 

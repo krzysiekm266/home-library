@@ -11,26 +11,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krzysiekm266.homelibrary.librarycard.LibraryCard;
 
 @Entity(name = "Person")
 @Table(name = "person")
 public class Person implements Serializable{
-    public enum Gender {
-        MALE("MALE"),
-        FAMALE("FEMALE");
-        private String gender;
-        private Gender(String gender) {
-            this.gender = gender;
-        }
-        
-    }
-
+ 
     @Id
     @SequenceGenerator(
         name = "person_sequence",
@@ -43,14 +36,14 @@ public class Person implements Serializable{
     private Long id;
 
     
-    @Column(name = "first_name")
+    @Column(name = "first_name",columnDefinition = "TEXT")
     private String firstName ;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name",columnDefinition = "TEXT")
     private String lastName ;
 
     @Transient
-    @Column(name = "name",columnDefinition = "TEXT")
+   // @Column(name = "name",columnDefinition = "TEXT")
     private String name;
  
     @Column(name = "gender")
@@ -67,11 +60,11 @@ public class Person implements Serializable{
     private String address;
 
     @OneToOne(
-        mappedBy = "person",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true,
+        cascade = CascadeType.ALL, 
         fetch = FetchType.LAZY
     )
+    @JoinColumn(name = "library_card_id")
+    @JsonIgnore
     private LibraryCard libraryCard;
 
     public void addLibraryCard(LibraryCard libraryCard) {

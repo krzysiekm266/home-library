@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.tomcat.jni.Library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.krzysiekm266.homelibrary.book.Book;
 import com.krzysiekm266.homelibrary.exceptions.librarycard.LibraryCardNotFoundException;
-import com.krzysiekm266.homelibrary.exceptions.librarycard.LibraryCardRequiredException;
-import com.krzysiekm266.homelibrary.exceptions.person.PersonExistException;
 import com.krzysiekm266.homelibrary.exceptions.person.PersonRequiredException;
 import com.krzysiekm266.homelibrary.person.Person;
 import com.krzysiekm266.homelibrary.person.PersonRepository;
@@ -51,10 +48,10 @@ public class LibraryCardService {
         //     throw new PersonExistException("Person "+ findPerson.get().getName() +" already exist.");
         // }
         
-        LibraryCard newLibraryCard = this.libraryCardRepository.save(new LibraryCard());
-        cardOwner.addLibraryCard(newLibraryCard);
+        //LibraryCard newLibraryCard = this.libraryCardRepository.save(new LibraryCard());
+        LibraryCard newLibraryCard = new LibraryCard();
         newLibraryCard.setPerson(cardOwner);
-
+        cardOwner.addLibraryCard(newLibraryCard);
         this.personRepository.save(cardOwner);
         LibraryCard savedLibraryCard = this.libraryCardRepository.save(newLibraryCard);
 

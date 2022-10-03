@@ -1,6 +1,6 @@
 package com.krzysiekm266.homelibrary.person;
 
-import java.lang.reflect.Array;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
@@ -39,13 +39,32 @@ public class PersonService {
         return new ResponseEntity<Person>(findById,HttpStatus.FOUND);
     }
 /*************************************************************************** */
-    public ResponseEntity<Person> findPerson(@RequestBody Optional<Person> personToFind) {
+    public ResponseEntity<Person> findPerson(Optional<Person> personToFind) {
         Person person = personToFind.orElseThrow( () -> new PersonRequiredException("Person required.") );
-        Person findPerson = this.personRepository.findPerson(person)
+
+        if(person.getFirstName() == null) {
+            throw new PersonRequiredException("First name field is required.");
+        }
+        if(person.getLastName() == null) {
+            throw new PersonRequiredException("Last name field is required.");
+        }
+        if(person.getGender() == null) {
+            throw new PersonRequiredException("Gender field is required.");
+        }
+    
+        if(person.getDob() == null) {
+            throw new PersonRequiredException("Date of birth field is required.");
+        }
+        if(person.getAddress() == null) {
+            throw new PersonRequiredException("Address name field is required.");
+        }
+
+        Example<Person> examplePerson = Example.of(person);
+        Person findPerson = this.personRepository.findOne(examplePerson)
             .orElseThrow( () -> new PersonNotFoundException("Person not found."));
         return new ResponseEntity<Person>(findPerson,HttpStatus.FOUND);
     }
-/******************************************* */
+/****************************************************************************************************************** */
     public ResponseEntity<Person> create(Optional<Person> person) {
         Person newPerson = person.orElseThrow(() -> new PersonRequiredException("Person required."));
        

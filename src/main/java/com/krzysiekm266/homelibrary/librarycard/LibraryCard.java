@@ -17,8 +17,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.krzysiekm266.homelibrary.book.Book;
 import com.krzysiekm266.homelibrary.person.Person;
 
@@ -49,16 +51,26 @@ public class LibraryCard implements Serializable {
         generator = "library_id_sequence"
     )
     @Column(name = "library_id")
+    @NaturalId
     private Integer libraryCardId;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "libraryCard",orphanRemoval = true,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
-    @JsonIgnore
     private Person person;
     
     @OneToMany(mappedBy = "libraryCard",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Book> books = new HashSet<>();
 
+    public void addPerson(Person person) {
+        person.addLibraryCard(this);
+        this.person = person;
+    }
+    public void removePerson() {
+        if(person != null) {
+            this.person.setLibraryCard(null);
+            this.person = null;
+        }
+    }
     public void addBook(Book book) {
 		books.add(book);
 		book.setLibraryCard(this);

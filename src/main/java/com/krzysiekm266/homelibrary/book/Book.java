@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.krzysiekm266.homelibrary.author.Author;
 import com.krzysiekm266.homelibrary.librarycard.LibraryCard;
 
