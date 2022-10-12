@@ -31,6 +31,7 @@ public class LibraryCard implements Serializable {
     @SequenceGenerator(
         name = "library_card_sequence",
         sequenceName = "library_card_sequence",
+        initialValue = 1000,
         allocationSize = 1
 
     )
@@ -40,37 +41,14 @@ public class LibraryCard implements Serializable {
     )
     private Long id;
 
-    @SequenceGenerator(
-        name = "library_id_sequence",
-        sequenceName = "library_id_sequence",
-        allocationSize = 1,
-        initialValue = 100
-    )
-    @GeneratedValue(
-        strategy = GenerationType.SEQUENCE,
-        generator = "library_id_sequence"
-    )
-    @Column(name = "library_id")
-    @NaturalId
-    private Integer libraryCardId;
 
     @OneToOne(mappedBy = "libraryCard",orphanRemoval = true,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id")
     private Person person;
     
     @OneToMany(mappedBy = "libraryCard",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Book> books = new HashSet<>();
 
-    public void addPerson(Person person) {
-        person.addLibraryCard(this);
-        this.person = person;
-    }
-    public void removePerson() {
-        if(person != null) {
-            this.person.setLibraryCard(null);
-            this.person = null;
-        }
-    }
+  
     public void addBook(Book book) {
 		books.add(book);
 		book.setLibraryCard(this);
@@ -83,6 +61,12 @@ public class LibraryCard implements Serializable {
 
     public LibraryCard() {
     }
+    
+    public LibraryCard(Long id, Person person, Set<Book> books) {
+        this.id = id;
+        this.person = person;
+        this.books = books;
+    }
 
     public Long getId() {
         return id;
@@ -92,13 +76,6 @@ public class LibraryCard implements Serializable {
         this.id = id;
     }
 
-    public Integer getLibraryCardId() {
-        return libraryCardId;
-    }
-
-    public void setLibraryCardId(Integer libraryCardId) {
-        this.libraryCardId = libraryCardId;
-    }
 
     public Person getPerson() {
         return person;
@@ -115,24 +92,14 @@ public class LibraryCard implements Serializable {
     public void setBooks(Set<Book> books) {
         this.books = books;
     }
-
-    @Override
-    public String toString() {
-        return "LibraryCard [books=" + books + ", id=" + id + ", libraryCardId=" + libraryCardId + ", person=" + person
-                + "]";
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((books == null) ? 0 : books.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((libraryCardId == null) ? 0 : libraryCardId.hashCode());
         result = prime * result + ((person == null) ? 0 : person.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -142,20 +109,10 @@ public class LibraryCard implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         LibraryCard other = (LibraryCard) obj;
-        if (books == null) {
-            if (other.books != null)
-                return false;
-        } else if (!books.equals(other.books))
-            return false;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
-            return false;
-        if (libraryCardId == null) {
-            if (other.libraryCardId != null)
-                return false;
-        } else if (!libraryCardId.equals(other.libraryCardId))
             return false;
         if (person == null) {
             if (other.person != null)
@@ -164,6 +121,13 @@ public class LibraryCard implements Serializable {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "LibraryCard [id=" + id + ", person=" + person + ", books=" + books + "]";
+    }
+
+   
 
     
 

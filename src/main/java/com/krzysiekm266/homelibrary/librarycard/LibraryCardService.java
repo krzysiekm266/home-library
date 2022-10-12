@@ -51,7 +51,7 @@ public class LibraryCardService {
         //LibraryCard newLibraryCard = this.libraryCardRepository.save(new LibraryCard());
         LibraryCard newLibraryCard = new LibraryCard();
         newLibraryCard.setPerson(cardOwner);
-        cardOwner.addLibraryCard(newLibraryCard);
+        cardOwner.setLibraryCard(newLibraryCard);
         this.personRepository.save(cardOwner);
         LibraryCard savedLibraryCard = this.libraryCardRepository.save(newLibraryCard);
 

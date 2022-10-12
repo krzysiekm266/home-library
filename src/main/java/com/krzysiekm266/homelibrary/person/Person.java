@@ -59,25 +59,15 @@ public class Person implements Serializable{
     @Column(name = "address",columnDefinition = "TEXT")
     private String address;
 
+
+    @JsonIgnore
     @OneToOne(
         cascade = CascadeType.ALL, 
         fetch = FetchType.LAZY
     )
     @JoinColumn(name = "library_card_id")
-    @JsonIgnore
     private LibraryCard libraryCard;
 
-    public void addLibraryCard(LibraryCard libraryCard) {
-		libraryCard.setPerson(this);
-		this.libraryCard = libraryCard;
-	}
-
-	public void removeLibraryCard() {
-		if (libraryCard != null) {
-			libraryCard.setPerson(null);;
-			this.libraryCard = null;
-		}
-	}
     
     public Person() {
     }
@@ -87,8 +77,7 @@ public class Person implements Serializable{
         this.lastName = lastName;
         this.dob = dob;
         this.address = address;
-        this.addLibraryCard(libraryCard);
-        // this.libraryCard = libraryCard;
+        this.libraryCard = libraryCard;
     }
 
     public Long getId() {
