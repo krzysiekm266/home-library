@@ -1,6 +1,10 @@
 # Home library
-This is a backend app that uses :
-- springboot-web
+A simple api to keep your bookshelf in order.
+
+Purpose of the project: learning
+Technologies :
+- java
+- springboot(web, exceptions handler)
 - hibernate(OneToOne,OneToMany,ManyToMany)
-- spring security
-- exception handler
+Status:
+- in development
